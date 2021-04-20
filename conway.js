@@ -63,7 +63,7 @@ function init() {
 
 
 // get the total number of neighboring cells that are alive.
-function totalAliveNeighbors()
+function totalAliveNeighbors(x, y)
 {
   let sum = 0;
   let newX = 0;
@@ -84,6 +84,30 @@ function totalAliveNeighbors()
   
   return sum;    
 }
+
+// Update the cells.
+function updateCells()
+{
+  // Deep copy the board.
+  let nextBoard = JSON.parse(JSON.stringify(cells));
+
+  // Update the new board.
+  for(let i = 0; i < rows; i++)
+  {
+    for(let j = 0; j < cols; j++)
+    {
+      let numAlive = totalAliveNeighbors(i, j);
+      let isAlive = (cells[i][j] == lifeState.alive);
+      
+      if(isAlive && (numAlive < 2 || numAlive > 3))
+        nextBoard[i][j] = lifeState.dead;
+      else if(!isAlive && numAlive == 3)
+        nextBoard[i][j] = lifeState.alive;
+    }
+  }
+  cells = nextBoard;
+}
+
 
 
 function startAnimating(fps) {
@@ -127,6 +151,8 @@ function animate() {
     return;
   }
 
+  updateCells();
+  
   // request another frame
 
   requestAnimationFrame(animate);
@@ -160,4 +186,4 @@ function animate() {
 
 
 init();
-startAnimating(10);
+startAnimating(20);
