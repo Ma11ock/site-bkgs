@@ -71,10 +71,15 @@ function startAnimating(fps) {
   animate();
 }
 
+// Optimized drawing function.
 function draw() {
-  let drawCell = { 'x' : 0, 'y' : 0, 'width' : (window.innerWidth / rows), 'height' : (window.innerHeight / cols)};
-  
+  let wWidth = window.innerWidth;
+  let wHeight = window.innerHeight;
+  let drawCell = { 'x' : 0, 'y' : 0, 'width' : wWidth / rows, 'height' : wHeight / cols};
 
+  tmpContext.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  
   tmpContext.beginPath();
   tmpContext.fillStyle = '#FFFFFF';
   for(let i = 0; i < rows; i++) {
@@ -89,7 +94,7 @@ function draw() {
   tmpContext.fill();
   tmpContext.closePath();
 
-  context.drawImage(tmpCanvas, 0, 0, window.innerWidth, window.innerHeight);
+  context.drawImage(tmpCanvas, 0, 0, wWidth, wHeight);
 }
 
 function animate() {
