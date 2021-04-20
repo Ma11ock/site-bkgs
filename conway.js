@@ -65,15 +65,19 @@ function startAnimating(fps) {
 function draw() {
   let drawCell = { 'x' : 0, 'y' : 0, 'width' : (window.innerWidth / rows), 'height' : (window.innerHeight / cols)};
 
+  context.beginPath();
+  context.fillStyle = '#FFFFFF';
   for(let i = 0; i < rows; i++) {
     for(let j = 0; j < cols; j++) {
       drawCell.x = i * drawCell.width;
       drawCell.y = j * drawCell.height;
 
-      context.fillStyle = ((cells[i][j] === lifeState.alive) ? '#FFFFFF' : '#000000');
-      context.fillRect(drawCell.x, drawCell.y, drawCell.width, drawCell.height);
+      if(cells[i][j] === lifeState.alive)
+        context.rect(drawCell.x, drawCell.y, drawCell.width, drawCell.height);
     }
   }
+  context.fill();
+  context.closePath();
 }
 
 function animate() {
@@ -105,11 +109,11 @@ function animate() {
     // TESTING...Report #seconds since start and achieved fps.
     let sinceStart = now - startTime;
     let currentFps = Math.round(1000 / (sinceStart / ++frameCount) * 100) / 100;
-    // context.fillStyle = 'white';
-    // context.fillRect(0, 0, 200, 100);
-    // context.font = '25px Arial';
-    // context.fillStyle = 'black';
-    //context.fillText("FPS: " + currentFps, 10, 30);
+    context.fillStyle = 'white';
+    context.fillRect(0, 0, 200, 100);
+    context.font = '25px Arial';
+    context.fillStyle = 'black';
+    context.fillText("FPS: " + currentFps, 10, 30);
 
   }
 }
