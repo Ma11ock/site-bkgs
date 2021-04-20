@@ -8,7 +8,7 @@ let canvas;
 let context;
 
 // Rows and columns of the board.
-let rows = 50;
+let rows = 100;
 let cols = 50;
 
 // Divisor for likelyhood the cell starts out as alive.
@@ -41,7 +41,12 @@ function init() {
   newCanvas.style['left'] = 0;
   newCanvas.style['right'] = 0;
   newCanvas.style['z-index'] = -1;
+  newCanvas.width  = window.innerWidth;
+  newCanvas.height = window.innerHeight;
+  document.body.style.backgroundColor = "black";
+
   document.body.appendChild(newCanvas);
+  
   
   canvas = document.getElementById('bkg-canvas');
   context = canvas.getContext('2d');
@@ -57,6 +62,19 @@ function startAnimating(fps) {
   animate();
 }
 
+function draw() {
+  let drawCell = { 'x' : 0, 'y' : 0, 'width' : (window.innerWidth / rows), 'height' : (window.innerHeight / cols)};
+
+  for(let i = 0; i < rows; i++) {
+    for(let j = 0; j < cols; j++) {
+      drawCell.x = i * drawCell.width;
+      drawCell.y = j * drawCell.height;
+
+      context.fillStyle = ((cells[i][j] === lifeState.alive) ? '#FFFFFF' : '#000000');
+      context.fillRect(drawCell.x, drawCell.y, drawCell.width, drawCell.height);
+    }
+  }
+}
 
 function animate() {
 
@@ -87,20 +105,15 @@ function animate() {
     // TESTING...Report #seconds since start and achieved fps.
     let sinceStart = now - startTime;
     let currentFps = Math.round(1000 / (sinceStart / ++frameCount) * 100) / 100;
-    context.fillStyle = 'white';
-    context.fillRect(0, 0, 200, 100);
-    context.font = '25px Arial';
-    context.fillStyle = 'black';
-    context.fillText("FPS: " + currentFps, 10, 30);
+    // context.fillStyle = 'white';
+    // context.fillRect(0, 0, 200, 100);
+    // context.font = '25px Arial';
+    // context.fillStyle = 'black';
+    //context.fillText("FPS: " + currentFps, 10, 30);
 
   }
 }
 
-function draw(){
-  let randomColor = Math.random() > 0.5? '#ff8080' : '#0099b0';
-  context.fillStyle = randomColor;
-  context.fillRect(100, 50, 200, 175);
-}
 
 init();
 startAnimating(10);
