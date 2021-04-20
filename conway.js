@@ -62,6 +62,29 @@ function init() {
 }
 
 
+// get the total number of neighboring cells that are alive.
+function totalAliveNeighbors()
+{
+  let sum = 0;
+  let newX = 0;
+  let newY = 0;
+  for(let i = -1; i < 2; i++)
+  {
+    for(let j = -1; j < 2; j++)
+    {
+      newX = (x + i + rows) % rows;
+      newY = (y + j + cols) % cols;
+      if(cells[newX][newY] == lifeState.alive)
+        sum++;
+    }
+  }
+
+  if(cells[x][y] == lifeState.alive)
+    sum--;
+  
+  return sum;    
+}
+
 
 function startAnimating(fps) {
   fpsInterval = 1000 / fps;
