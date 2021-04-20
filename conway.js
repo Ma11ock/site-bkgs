@@ -7,6 +7,33 @@ let fps, fpsInterval, startTime, now, then, elapsed;
 let canvas;
 let context;
 
+// Rows and columns of the board.
+let rows = 50;
+let cols = 50;
+
+// Divisor for likelyhood the cell starts out as alive.
+// For example: 4 means 1/4 chance.
+let chance = 4;
+
+// Enum of alive and dead states.
+const lifeState = Object.freeze({"alive":1, "dead":2});
+
+
+// 2D array of cells.
+// TODO presets like Gaspar gun 
+let cells = (_ => {
+  let retVal = [[]];
+  for(let i = 0; i < rows; i++) {
+    retVal[i] = [];
+    for(let j = 0; j < cols; j++) {
+      retVal[i][j] = ((Math.floor((Math.random() * chance) + 1) == 1) ? lifeState.alive : lifeState.dead);
+    }
+  }
+  
+  return retVal;
+})();
+
+
 function init() {
   let newCanvas = document.createElement('canvas');
   newCanvas.setAttribute("id", 'bkg-canvas');
