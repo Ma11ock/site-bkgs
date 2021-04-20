@@ -33,6 +33,8 @@ let cells = (_ => {
   return retVal;
 })();
 
+let tmpCanvas;
+let tmpContext;
 
 function init() {
   let newCanvas = document.createElement('canvas');
@@ -44,6 +46,13 @@ function init() {
   newCanvas.width  = window.innerWidth;
   newCanvas.height = window.innerHeight;
   document.body.style.backgroundColor = "black";
+
+  tmpCanvas = document.createElement('canvas');
+  tmpContext = tmpCanvas.getContext('2d');
+  tmpCanvas.width  = window.innerWidth;
+  tmpCanvas.height = window.innerHeight;
+  document.body.style.backgroundColor = "black";
+
 
   document.body.appendChild(newCanvas);
   
@@ -64,20 +73,23 @@ function startAnimating(fps) {
 
 function draw() {
   let drawCell = { 'x' : 0, 'y' : 0, 'width' : (window.innerWidth / rows), 'height' : (window.innerHeight / cols)};
+  
 
-  context.beginPath();
-  context.fillStyle = '#FFFFFF';
+  tmpContext.beginPath();
+  tmpContext.fillStyle = '#FFFFFF';
   for(let i = 0; i < rows; i++) {
     for(let j = 0; j < cols; j++) {
       drawCell.x = i * drawCell.width;
       drawCell.y = j * drawCell.height;
 
       if(cells[i][j] === lifeState.alive)
-        context.rect(drawCell.x, drawCell.y, drawCell.width, drawCell.height);
+        tmpContext.rect(drawCell.x, drawCell.y, drawCell.width, drawCell.height);
     }
   }
-  context.fill();
-  context.closePath();
+  tmpContext.fill();
+  tmpContext.closePath();
+
+  context.drawImage(tmpCanvas, 0, 0, window.innerWidth, window.innerHeight);
 }
 
 function animate() {
