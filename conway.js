@@ -2,7 +2,8 @@
 
 let stop = false;
 let frameCount = 0;
-let fps, fpsInterval, startTime, now, then, elapsed;
+let desiredFPS = 20;
+let fpsInterval, startTime, now, then, elapsed;
 
 let canvas;
 let context;
@@ -18,6 +19,9 @@ let chance = 4;
 // Enum of alive and dead states.
 const lifeState = Object.freeze({"alive":1, "dead":2});
 
+let frames = 0;
+let fps = 0;
+let frameTime = 1 / desiredFPS;
 
 // 2D array of cells.
 // TODO presets like Gaspar gun 
@@ -36,7 +40,8 @@ let cells = (_ => {
 let tmpCanvas;
 let tmpContext;
 
-function init() {
+// Init function.
+(_ => {
   let newCanvas = document.createElement('canvas');
   newCanvas.setAttribute("id", 'bkg-canvas');
   newCanvas.style['position'] = 'fixed';
@@ -60,7 +65,7 @@ function init() {
   
   canvas = document.getElementById('bkg-canvas');
   context = canvas.getContext('2d');
-}
+})();
 
 
 // get the total number of neighboring cells that are alive.
@@ -111,13 +116,6 @@ function updateCells()
 
 
 
-function startAnimating(fps) {
-  fpsInterval = 1000 / fps;
-  then = Date.now();
-  startTime = then;
-  console.log("Starting on Unix timestamp: " + startTime);
-  animate();
-}
 
 // Optimized drawing function.
 function draw() {
@@ -145,7 +143,7 @@ function draw() {
   context.drawImage(tmpCanvas, 0, 0, wWidth, wHeight);
 }
 
-function animate() {
+function gameLoop() {
 
   // stop
   if (stop) {
@@ -156,7 +154,7 @@ function animate() {
   
   // request another frame
 
-  requestAnimationFrame(animate);
+  requestAnimationFrame(gameLoop);
 
   // calc elapsed time since last loop
 
@@ -174,20 +172,24 @@ function animate() {
 
 
     
-    let sinceStart = now - startTime;
-    let currentFps = Math.round(1000 / (sinceStart / ++frameCount) * 100) / 100;
     context.fillStyle = 'white';
     context.fillRect(0, 0, 200, 100);
     context.font = '25px Arial';
     context.fillStyle = 'black';
-    context.fillText("FPS: " + currentFps, 10, 30);
+    context.fillText("FPS: " + fps, 10, 30);
 
   }
 }
 
 
-init();
-startAnimating(20);
+(_ => {
+  fpsInterval = 1000 / desiredFPS;
+  then = Date.now();
+  startTime = then;
+  console.log("Starting on Unix timestamp: " + startTime);
+  gameLoop();
+})();
+
 
 window.addEventListener('resize', _ => {
   tmpCanvas.width = window.innerWidth;
