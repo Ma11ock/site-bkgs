@@ -8,8 +8,8 @@ let canvas;
 let context;
 
 // Rows and columns of the board.
-let rows = 100;
-let cols = 50;
+let rows = 150;
+let cols = 75;
 
 // Divisor for likelyhood the cell starts out as alive.
 // For example: 4 means 1/4 chance.
@@ -39,9 +39,10 @@ let tmpContext;
 function init() {
   let newCanvas = document.createElement('canvas');
   newCanvas.setAttribute("id", 'bkg-canvas');
-  newCanvas.style['position'] = 'absolute';
+  newCanvas.style['position'] = 'fixed';
   newCanvas.style['left'] = 0;
   newCanvas.style['right'] = 0;
+  newCanvas.style['top'] = 0;
   newCanvas.style['z-index'] = -1;
   newCanvas.width  = window.innerWidth;
   newCanvas.height = window.innerHeight;
@@ -172,7 +173,7 @@ function animate() {
     draw();
 
 
-    // TESTING...Report #seconds since start and achieved fps.
+    
     let sinceStart = now - startTime;
     let currentFps = Math.round(1000 / (sinceStart / ++frameCount) * 100) / 100;
     context.fillStyle = 'white';
@@ -187,3 +188,11 @@ function animate() {
 
 init();
 startAnimating(20);
+
+window.addEventListener('resize', _ => {
+  tmpCanvas.width = window.innerWidth;
+  tmpCanvas.height = window.innerHeight;
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
