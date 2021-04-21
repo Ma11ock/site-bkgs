@@ -1,8 +1,8 @@
 "use strict";
 
-let stop = false;
 let frameCount = 0;
 let desiredFPS = 20;
+// For controlling the frame rate.
 let fpsInterval, startTime, now, then, elapsed;
 
 let canvas;
@@ -19,9 +19,16 @@ let chance = 4;
 // Enum of alive and dead states.
 const lifeState = Object.freeze({"alive":1, "dead":2});
 
-let frames = 0;
-let fps = 0;
 let frameTime = 1 / desiredFPS;
+// False to not show the FPS, true to show it.
+let showFPS = false;
+// Number of milliseconds since the start of the program.
+let msTimer = Date.now();
+// Increment for each frame per second.
+let frames = 0;
+// The framerate.
+let fps = 0;
+
 
 // 2D array of cells.
 // TODO presets like Gaspar gun 
@@ -143,17 +150,11 @@ function draw() {
   context.drawImage(tmpCanvas, 0, 0, wWidth, wHeight);
 }
 
+
 function gameLoop() {
-
-  // stop
-  if (stop) {
-    return;
-  }
-
   updateCells();
   
   // request another frame
-
   requestAnimationFrame(gameLoop);
 
   // calc elapsed time since last loop
@@ -169,15 +170,22 @@ function gameLoop() {
     // Also, adjust for fpsInterval not being multiple of 16.67
     then = now - (elapsed % fpsInterval);
     draw();
+    frames++;
 
 
-    
-    context.fillStyle = 'white';
-    context.fillRect(0, 0, 200, 100);
-    context.font = '25px Arial';
-    context.fillStyle = 'black';
-    context.fillText("FPS: " + fps, 10, 30);
-
+    if(showFPS) {
+      if(now - msTimer >= 1000) {
+        fps = frames;
+        frames = 0;
+        msTimer += 1000;
+      }
+      
+      context.fillStyle = 'white';
+      context.fillRect(0, 0, 200, 100);
+      context.font = '25px Arial';
+      context.fillStyle = 'black';
+      context.fillText("FPS: " + fps, 10, 30);
+    }
   }
 }
 
