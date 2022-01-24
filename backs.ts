@@ -1,8 +1,8 @@
 let canvas: HTMLCanvasElement;
 let context: CanvasRenderingContext2D;
 
-let tmpCanvas: HTMLCanvasElement;
-let tmpContext: CanvasRenderingContext2D;
+let bkgCallback: (canvasCtx: HTMLCanvasElement,
+                  contex2d: CanvasRenderingContext2D) => void;
 
 export function initBackground() {
     let newCanvas: HTMLCanvasElement = document.createElement('canvas');
@@ -16,8 +16,8 @@ export function initBackground() {
     newCanvas.height = window.innerHeight;
     document.body.style.backgroundColor = "black";
 
-    tmpCanvas = document.createElement('canvas');
-    tmpContext = tmpCanvas.getContext('2d');
+    let tmpCanvas = document.createElement('canvas');
+    let tmpContext = tmpCanvas.getContext('2d');
     tmpCanvas.width  = window.innerWidth;
     tmpCanvas.height = window.innerHeight;
     document.body.style.backgroundColor = "black";
@@ -28,18 +28,24 @@ export function initBackground() {
     context = canvas.getContext('2d');
 }
 
-export function getContext() : CanvasRenderingContext2D {
-    return context;
+function doBackground() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    bkgCallback(canvas, context);
+
+    context.fill();
+    context.closePath();
+    context.drawImage(canvas, 0, 0, canvas.width, canvas.height);
 }
 
-export function getCanvas() : HTMLCanvasElement {
-    return canvas;
+export function setBkgFunc(callback: (canvasCtx: HTMLCanvasElement,
+                                      contex2d: CanvasRenderingContext2D) => void) {
+    bkgCallback = callback;
+    doBackground();
 }
 
 window.addEventListener('resize', _ => {
-    tmpCanvas.width = window.innerWidth;
-    tmpCanvas.height = window.innerHeight;
-
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    doBackground();
 });
