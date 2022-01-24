@@ -9,6 +9,7 @@
     "outDir": "bin"
   },
   "files": [
-    "archs.ts"
+    "archs.ts",
+    "backs.ts"
   ]
 }
