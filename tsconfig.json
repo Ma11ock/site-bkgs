@@ -9,7 +9,7 @@
     "outDir": "bin"
   },
   "files": [
-    "movementInCircles.ts",
+    "movementInSquares.ts",
     "backs.ts"
   ]
 }

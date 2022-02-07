@@ -39,7 +39,7 @@ setBkgFunc((canvas: HTMLCanvasElement,
             context: CanvasRenderingContext2D) => {
                 let wWidth = window.innerWidth;
                 let wHeight = window.innerHeight;
-                let drawCell = new DrawCell(0, 0, 32, 32);
+                let drawCell = new DrawCell(0, 0, 32, 32, '#2eb583');
                 // Number of squares based off of width in pixels.
                 let numSquares = Math.ceil(wWidth / drawCell.width);
                 let horizon = wWidth * 0.65;
